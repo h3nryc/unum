@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="apple-mobile-web-app-status-bar-style" content="#EF2021">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Unum</title>
+    <link rel="stylesheet" href="css/framework7.ios.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/my-app.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="page-content">
+        <!-- Slider Main -->
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+           <!-- You tab -->
+            <div id="you" class="swiper-slide">
+              <div class="hero-img">
+              <h2 class="logo">Unum | You</h2>
+              </div>
+              <div class="main-list">
+              <!-- You list -->
+                <ul class="you-list">
+                  <li class="wet-card">
+                    <div class="emoji-left">
+                      <h2>👋</h2>
+                    </div>
+                    <div class="wet-text">
+                      <h2>The weather today is 22° ☀️</h2>
+                      <p>Have a nice day!</p>
+                    </div>
+                  </li>
+                  <li class="food-card">
+                    <div class="food-head">
+                      <h2>🍴 Food</h2>
+                    </div>
+                    <div class="food-hero"></div>
+                    <div class="food-footer">
+                      <h2>Sushi Den</h2>
+                      <p style="margin: 0;">It looks like it's dinner time this restruant is 2km away</p>
+                    </div>
+                  </li>
+                  </ul>
+                </ul>
+              </div>
+            </div>
+            <!-- World tab -->
+            <div id="world" class="swiper-slide">
+              
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="lib/socket.io-1.4.5.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+  </body>
+</html>
