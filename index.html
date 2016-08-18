@@ -16,7 +16,12 @@
   </head>
   <body>
 
-    <div class="page-content">
+    <div class="page-content pull-to-refresh-content" data-ptr-distance="55">
+    <!-- Default pull to refresh layer-->
+    <div class="pull-to-refresh-layer">
+      <div class="preloader"></div>
+      <div class="pull-to-refresh-arrow"></div>
+    </div>
         <!-- Slider Main -->
         <div class="swiper-container">
           <div class="swiper-wrapper">
@@ -29,7 +34,7 @@
               <!-- You list -->
                 <ul class="you-list">
                   <li onclick="more();" class="wet-card">
-                    <div class="emoji-left">
+                    <div id='emoji-left' class="emoji-left">
                       <h2>👋</h2>
                     </div>
                     <div class="wet-text">
