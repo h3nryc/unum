@@ -46,7 +46,7 @@ function login(){
     alert("Created Acount now log in!")
   });
   socket.on('regUnsuc', function () {
-    alert('Your username or email is alredy taken')
+    alert('Your username or email is alredy taken :(')
   });
   socket.on('logSuc', function(session){
     storage.setItem("logUser", session)

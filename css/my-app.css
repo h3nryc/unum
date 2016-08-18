@@ -50,7 +50,7 @@ li{
 	color: white;
 	background-color: #1abc9c;
 	display: inline-block;
-	height: 60px;
+	min-height: 60px;
 	width: 95%;
 -webkit-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 -moz-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
@@ -89,7 +89,7 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 .food-card{
 	display: inline-block;
 	background-color: #34495e;
-	height: 400px;
+	min-height: 400px;
 	width: 95%;
 	-webkit-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	-moz-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
@@ -110,7 +110,7 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 
 .food-hero{
 	text-align: center;
-	height: 250px;
+	min-height: 250px;
 	width: 100%;
 	background-size: cover;
     background-repeat: no-repeat;
@@ -129,7 +129,50 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	margin: 0;
 }
 
+.event-card{
+	display: inline-block;
+	background-color: #9b59b6;
+	height: 440px;
+	width: 95%;
+	-webkit-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
+	-moz-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
+	box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
+}
+
+.event-head{
+	padding-top: 12px;
+	padding-left: 12px;
+	padding-bottom: 12px;
+}
+
+.event-head h2{
+	color: white;
+	margin: 0;
+	text-align: left;
+}
+
+.event-hero{
+	text-align: center;
+	height: 250px;
+	width: 100%;
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+	background-image: url("../coldplay.jpg");
+}
+
+.event-footer{
+	color: white;
+	padding-top: 12px;
+	padding-left: 12px;
+	text-align: left;
+}
+
+.event-footer h2{
+	margin: 0;
+}
 
 
-
-
+.event-footer p{
+	margin: 0;
+}
