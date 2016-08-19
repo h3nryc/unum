@@ -15,13 +15,12 @@
     <script src='https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="sydney")&format=json&callback=callbackFunction1'></script>
   </head>
   <body>
-
     <div class="page-content pull-to-refresh-content" data-ptr-distance="55">
-    <!-- Default pull to refresh layer-->
-    <div class="pull-to-refresh-layer">
+      <div class="pull-to-refresh-layer">
       <div class="preloader"></div>
       <div class="pull-to-refresh-arrow"></div>
     </div>
+    <!-- Default pull to refresh layer-->
         <!-- Slider Main -->
         <div class="swiper-container">
           <div class="swiper-wrapper">
@@ -41,7 +40,7 @@
                       <h2><div style='display: inline;' id='onewordweather'></div>&nbsp<div style='display: inline;' id='temp'></div></h2>
                       <p>Have a nice day!</p>
                     </div>
-                    <div class="wet-hidden"></div>
+                    <div id='wet-hidden' class="wet-hidden"></div>
                   </li>
                   <li class="food-card">
                     <div class="food-head">
@@ -76,7 +75,6 @@ Pasadena, California 91103</p>
           <div class="swiper-pagination"></div>
         </div>
     </div>
-
     <script type="text/javascript" src="lib/socket.io-1.4.5.js"></script>
     <script type="text/javascript" src="js/framework7.min.js"></script>
     <script type="text/javascript" src="lib/jquery.min.js"></script>

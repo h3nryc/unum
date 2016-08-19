@@ -70,6 +70,17 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	padding-top: 5px;
 }
 
+.forecastemoji h2 {
+	float: left;
+	font-size: 30pt;
+	margin: 0;
+}
+
+.forecastemoji {
+	padding-left: 10px;
+	padding-top: 5px;
+}
+
 .wet-text{
 	padding-left: 75px;
 }
