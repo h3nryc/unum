@@ -8,11 +8,11 @@ var $$ = Dom7;
 
 
 function more() {
-	if ($(".wet-card").height() == 400) {
+	if ($(".wet-card").height() == 350) {
 			$(".wet-card").animate({height: 60});
 			$(".wet-hidden").toggle();
 	}else{
-		$(".wet-card").animate({height: 400});
+		$(".wet-card").animate({height: 350});
 		$(".wet-hidden").fadeToggle("slow")
 	}
 
