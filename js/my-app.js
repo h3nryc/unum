@@ -41,9 +41,21 @@ function getNearby(position) {
 		  var long =  Number(location.coords.longitude).toFixed(2); 
 		  localStorage.setItem("lat", lat);
 		  localStorage.setItem("long", long);
-		  getNearby();
+		  localStorage.setItem("quadTime", Date.now());
+		  getVenue();
 	});
 	}else{
+		getVenue();
+	}
+	  
+}
+
+
+function getVenue() {
+	//Check if Quad is old
+	if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
+		getNearby();
+	}
 		var apiLink = "https://api.foursquare.com/v2/venues/search?ll="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&client_id="+clientId+"&client_secret="+clientSecret+""
 		$.ajax({
   		url: apiLink,
@@ -53,6 +65,7 @@ function getNearby(position) {
 
     	
   			for (var i = 0; i < 5; i++) {
+  				//Unpack function
            		console.log(data.response.venues[i])
            		var name = data.response.venues[i].name;
            		var type = data.response.venues[i].categories[0].shortName;
@@ -68,12 +81,7 @@ function getNearby(position) {
 
   		}
 	});
-	}
-	  
 }
-
-
-
 
 
 function type2Emoji(type) {
