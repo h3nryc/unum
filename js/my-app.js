@@ -53,9 +53,11 @@ function getNearby(position) {
 
 function getVenue() {
 	//Check if Quad is old
-	if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
-		getNearby();
-	}
+	// if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
+	// 	localStorage.removeItem("lat");
+	// 	 localStorage.removeItem("long");
+	// 	getNearby();
+	// }
 		var apiLink = "https://api.foursquare.com/v2/venues/search?ll="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&client_id="+clientId+"&client_secret="+clientSecret+""
 		$.ajax({
   		url: apiLink,
