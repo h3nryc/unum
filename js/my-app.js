@@ -52,7 +52,7 @@ function getNearby(position) {
 
 
 function getVenue() {
-	//Check if Quad is old
+	// Check if Quad is old
 	// if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
 	// 	localStorage.removeItem("lat");
 	// 	 localStorage.removeItem("long");
