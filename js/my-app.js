@@ -24,6 +24,12 @@ ptrContent.on('refresh', function (e) {
         myApp.pullToRefreshDone();
 });
 
+/*
+
+Start Nearby Places
+
+*/
+
 //Nearby Places (This is front end for now but will be pushed to back)
 
 
@@ -43,9 +49,11 @@ function getNearby(position) {
 		  localStorage.setItem("long", long);
 		  localStorage.setItem("quadTime", Date.now());
 		  getVenue();
+		  getEvent()
 	});
 	}else{
 		getVenue();
+		getEvent()
 	}
 	  
 }
@@ -58,6 +66,8 @@ function getVenue() {
 	// 	 localStorage.removeItem("long");
 	// 	getNearby();
 	// }
+
+	//Get api request
 		var apiLink = "https://api.foursquare.com/v2/venues/search?ll="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&client_id="+clientId+"&client_secret="+clientSecret+""
 		$.ajax({
   		url: apiLink,
@@ -66,9 +76,8 @@ function getVenue() {
 
 
     	
-  			for (var i = 0; i < 5; i++) {
+  			for (var i = 0; i < 6; i++) {
   				//Unpack function
-           		console.log(data.response.venues[i])
            		var name = data.response.venues[i].name;
            		var type = data.response.venues[i].categories[0].shortName;
            		var tip = data.response.venues[i].stats.tipCount;
@@ -78,6 +87,7 @@ function getVenue() {
            		var vLong = data.response.venues[i].location.long;
            		var verified = data.response.venues[i].verified
            		var id = data.response.venues[i].id
+           		//Append data to list
            		$( ".wet-card" ).after( ' <li style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
            	}  
 
@@ -111,19 +121,19 @@ function type2Emoji(type) {
 
 
 function type2Color(type) {
-	if(type == "Beach"){
+	if(type == "Beach" || type == 1){
 		return "#f1c40f";
-	}else if (type == "Park"){
+	}else if (type == "Park" || type == 2){
 		return "#2ecc71";
-	}else if (type == "Playground"){
+	}else if (type == "Playground" || type == 3){
 		return "#e74c3c";
-	}else if (type == "Food & Drink"){
+	}else if (type == "Food & Drink" || type == 4){
 		return "#e67e22";
 	}else if(type == "Preserve"){
 		return "#EF2D56";
-	}else if (type == "Historic Site" || type == "Café"){
+	}else if (type == "Historic Site" || type == "Café" || type == 5){
 		return '#ED7D3A';
-	}else if (type == "Pool"){
+	}else if (type == "Pool" || type == 6){
 		return "#5BC0EB";
 	}
 	else{
@@ -138,7 +148,69 @@ function type2Color(type) {
 		
 	}
 }
+
+//Call Function on load
 window.onload = function () {
  getNearby();   
 }
+
+/*
+
+End Nearby Places
+
+*/
+/*
+
+Start Events
+
+*/
+
+function getEvent() {
+	var eventKey = "HJRp25zS5jm5NJQr"
+	var eventLink = "http://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
+		$.ajax({
+  		url: eventLink,
+  		dataType: 'jsonp',
+  	success: function(data){
+  		
+
+
+  			for (var i = 0; i < 6; i++) {
+  				console.log(data.events.event[i])
+  				//Unpack function
+           		var name = data.events.event[i].title;
+           		var lat = data.events.event[i].latitude;
+           		var long = data.events.event[i].longitude;		
+				try {
+    				var image = data.events.event[i].image.medium.url;
+				}
+				catch(err) {
+    				var image = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRzbjllLfcybGqvOmehP2qaxFPAs5IXz5XLolnAfu_CuXh5eFLoevIxsTuh"
+				}	
+           		var venueName = data.events.event[i].venue_name;
+           		var venueAddress = data.events.event[i].venue_address;
+           		var startTime = data.events.event[i].start_time;
+           		var id = data.events.event[i].id;
+           		var eventfulUrl = data.events.event[i].url;
+           		var cityName = data.events.event[i].city_name;
+           		//Append data to list
+           		var rand = Math.floor(Math.random() * 7) + 1
+           		$('#event-start').after(' <li style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
+           	} 
+
+
+
+
+  	}
+  })
+}
+
+
+
+
+
+
+
+
+
 

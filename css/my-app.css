@@ -135,7 +135,6 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 
 .event-card{
 	display: inline-block;
-	background-color: #9b59b6;
 	height: 440px;
 	width: 95%;
 	-webkit-box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
@@ -147,6 +146,7 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	padding-top: 12px;
 	padding-left: 12px;
 	padding-bottom: 12px;
+	padding-right: 12px;
 }
 
 .event-head h2{
@@ -162,7 +162,7 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-	background-image: url("../coldplay.jpg");
+    background-color: black;
 }
 
 .event-footer{
@@ -170,6 +170,7 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	padding-top: 12px;
 	padding-left: 12px;
 	text-align: left;
+	padding-right: 12px;
 }
 
 .event-footer h2{
@@ -186,7 +187,6 @@ box-shadow: -1px 2px 14px -4px rgba(0,0,0,0.75);
 	margin: 0;
 	text-align: left;
 	padding-left: 12px;
-	padding-top: 12px;
 }
 
 #wet-list{
