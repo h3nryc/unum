@@ -1,3 +1,11 @@
+/*
+
+	  Unum (c) All rights reserved.
+	 The code that powers unum front.
+	Coded by Henry Confos & Tom Lister.
+
+*/
+
 var myApp = new Framework7(); 
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
@@ -23,6 +31,47 @@ ptrContent.on('refresh', function (e) {
 		location.reload();
         myApp.pullToRefreshDone();
 });
+
+/*
+
+Start Main Functions
+
+*/
+
+
+function getDistance(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+function loadMore(type,lat,long,id,provider,name,address) {
+	var distance = getDistance(lat,long,localStorage.getItem("lat"),localStorage.getItem("long"));
+	var time = distance * 0.50;
+	var uberFare = distance * 1.50 + 5 + time;
+	var taxiFare = distance * 2.86;
+	var mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center="+lat+","+long+"&zoom=18&size=500x400&sensor=false"
+}
+
+
+
+/*
+
+End Main Functions
+
+*/
 
 /*
 
@@ -88,7 +137,7 @@ function getVenue() {
            		var verified = data.response.venues[i].verified
            		var id = data.response.venues[i].id
            		//Append data to list
-           		$( ".wet-card" ).after( ' <li style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
+           		$( ".wet-card" ).after( ' <li style="background-color: '+type2Color(type)+';"class="food-card fullscreen-able"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
            	}  
 
   		}
@@ -149,6 +198,11 @@ function type2Color(type) {
 	}
 }
 
+function getImage(query) {
+
+
+}
+
 //Call Function on load
 window.onload = function () {
  getNearby();   
@@ -176,7 +230,6 @@ function getEvent() {
 
 
   			for (var i = 0; i < 6; i++) {
-  				console.log(data.events.event[i])
   				//Unpack function
            		var name = data.events.event[i].title;
            		var lat = data.events.event[i].latitude;
@@ -206,7 +259,11 @@ function getEvent() {
 }
 
 
+/*
 
+End Events
+
+*/
 
 
 
