@@ -50,23 +50,29 @@ function getDistance(lat1,lon1,lat2,lon2) {
     ; 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
   var d = R * c; // Distance in km
-  return d;
+  return Number(d).toFixed(2);
 }
 
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-function loadMore(type,lat,long,id,provider,name,address) {
+function loadMore(type,lat,long,id,provider,name,address,emoji,color) {
+	console.log(1)
 	var distance = getDistance(lat,long,localStorage.getItem("lat"),localStorage.getItem("long"));
+	console.log(distance)
 	var time = distance * 0.50;
-	var uberFare = distance * 1.50 + 5 + time;
-	var taxiFare = distance * 2.86;
+	var uberFare = Number(distance * 1.50 + 5 + time).toFixed(2);
+	var taxiFare = Number(distance * 2.86 + 5).toFixed(2);
+	var uberLink = "https://m.uber.com/ul?client_id=YOUR_CLIENT_ID&action=setPickup&pickup[latitude]="+localStorage.getItem("lat")+"&pickup[longitude]=-"+localStorage.getItem("long")+"&pickup[nickname]=Your Location[formatted_address]=Your Location Rd&dropoff[latitude]="+lat+"&dropoff[longitude]=-"+long+"&dropoff[nickname]="+name+"[formatted_address]="+address+"&product_id=a1111c8c-c720-46c3-8534-2fcdd730040d&link_text=View%20team%20roster&partner_deeplink=Unum"
+	var taxiLink = "https://www.google.com.au/#safe=active&q=book%20a%20taxi"
 	var mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center="+lat+","+long+"&zoom=18&size=500x400&sensor=false"
+	$('.main-list').after(' <div style="background-color: '+color+'" class="info-card fullscreen"> <div onclick="closePopup();" class="info-head"> <i class="material-icons">arrow_back</i><h2 class="info-title">'+emoji+'   '+name+'</h2> </div> <div class="info-map" style="background-image: url('+mapUrl+');"></div> <div class="info-footer"> <p style="margin: 0;">'+name+' is located on <span style="font-weight: bold;">'+address+'</span></p> <h2 style="margin: 0;">In a taxi it would cost around <span style="font-weight: bold;">'+taxiFare+'</span> or an Uber would cost <span style="font-weight: bold;">'+uberFare+'</span> 🚕</h2> <div class="info-butt"> <div class="info-book">Book a</div><a href="'+uberLink+'"><div class="uber">Uber</div></a><a href="'+taxiLink+'>"<div class="taxi">Taxi</div></a> </div> <p>Infomation provided by '+provider+' ✌️</p> </div> </div>').hide().delay('300').slideDown();
 }
 
-
-
+function closePopup() {
+	$( ".fullscreen" ).remove().slideUp();
+}
 /*
 
 End Main Functions
@@ -133,11 +139,13 @@ function getVenue() {
            		var address = data.response.venues[i].location.address;
            		var city = data.response.venues[i].location.city;
            		var vLat = data.response.venues[i].location.lat;
-           		var vLong = data.response.venues[i].location.long;
+           		console.log(vLat)
+           		var vLong = data.response.venues[i].location.lng;
            		var verified = data.response.venues[i].verified
            		var id = data.response.venues[i].id
+           		var provider = "Foursquare"
            		//Append data to list
-           		$( ".wet-card" ).after( ' <li style="background-color: '+type2Color(type)+';"class="food-card fullscreen-able"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
+           		$( ".wet-card" ).slideDown().after( ' <li onclick="loadMore('+"'"+type+"'"+','+vLat+','+vLong+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+address+"'"+','+"'"+type2Emoji(type)+"'"+','+"'"+type2Emoji(type)+"'"+')" style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
            	}  
 
   		}
