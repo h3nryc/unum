@@ -7,7 +7,7 @@
 */
 
 var myApp = new Framework7(); 
-var socket = io('http://localhost:3293/')
+var socket = io('http://localhost:3293')
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
   var mySwiper = myApp.swiper('.swiper-container', {
