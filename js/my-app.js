@@ -5,7 +5,7 @@
 	Coded by Henry Confos & Tom Lister.
 
 */
-
+var socket = io("http://cly-swiftlyback.rhcloud.com")
 var myApp = new Framework7(); 
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
@@ -77,6 +77,17 @@ function closePopup() {
 		$('.info-card').remove();
 	});
 }
+
+function trunc(text) {
+	var pre = text.substring(0,26);
+	if (text.length >= 26) {
+		var final = pre+"...";
+		return final;
+	} else {
+		return pre;
+	}
+
+}
 /*
 
 End Main Functions
@@ -107,11 +118,11 @@ function getNearby(position) {
 		  localStorage.setItem("lat", lat);
 		  localStorage.setItem("long", long);
 		  localStorage.setItem("quadTime", Date.now());
-		  getVenue();
+		  socket.emit('getVenue', )
 		  getEvent()
 	});
 	}else{
-		getVenue();
+		socket.emit('getVenue', localStorage.getItem("lat"), localStorage.getItem("long"))
 		getEvent()
 	}
 	  
@@ -137,7 +148,8 @@ function getVenue() {
     	
   			for (var i = 0; i < 6; i++) {
   				//Unpack function
-           		var name = data.response.venues[i].name;
+           		var pre = data.response.venues[i].name;
+           		var name = trunc(pre);
            		var type = data.response.venues[i].categories[0].shortName;
            		var tip = data.response.venues[i].stats.tipCount;
            		var address = data.response.venues[i].location.address;
@@ -233,7 +245,7 @@ Start Events
 
 function getEvent() {
 	var eventKey = "HJRp25zS5jm5NJQr"
-	var eventLink = "http://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
+	var eventLink = "https://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
 		$.ajax({
   		url: eventLink,
   		dataType: 'jsonp',
@@ -243,11 +255,14 @@ function getEvent() {
 
   			for (var i = 0; i < 6; i++) {
   				//Unpack function
-           		var name = data.events.event[i].title;
+           		var pre = data.events.event[i].title;
+           		var name = trunc(pre);
            		var lat = data.events.event[i].latitude;
            		var long = data.events.event[i].longitude;		
 				try {
-    				var image = data.events.event[i].image.medium.url;
+    				var preImg = data.events.event[i].image.medium.url;
+    				var image = preImg.replace(/^http:\/\//i, 'https://');
+
 				}
 				catch(err) {
     				var image = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRzbjllLfcybGqvOmehP2qaxFPAs5IXz5XLolnAfu_CuXh5eFLoevIxsTuh"
@@ -258,9 +273,11 @@ function getEvent() {
            		var id = data.events.event[i].id;
            		var eventfulUrl = data.events.event[i].url;
            		var cityName = data.events.event[i].city_name;
+           		var provider = "Eventful"
+           		var emoji = "🎉";
            		//Append data to list
            		var rand = Math.floor(Math.random() * 7) + 1
-           		$('#event-start').after(' <li style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
+           		$('#event-start').after(' <li onclick="loadMore('+"'"+name+"'"+','+lat+','+long+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+venueAddress+"'"+','+"'"+emoji+"'"+','+"'"+type2Color(rand)+"'"+')" style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
            	} 
 
 
