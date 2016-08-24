@@ -7,6 +7,7 @@
 */
 
 var myApp = new Framework7(); 
+var socket = io('http://localhost:3293/')
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
   var mySwiper = myApp.swiper('.swiper-container', {
@@ -112,48 +113,14 @@ function getNearby(position) {
 	});
 	}else{
 		getVenue();
-		getEvent()
+		getEvent();
 	}
 	  
 }
 
 
 function getVenue() {
-	// Check if Quad is old
-	// if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
-	// 	localStorage.removeItem("lat");
-	// 	 localStorage.removeItem("long");
-	// 	getNearby();
-	// }
-
-	//Get api request
-		var apiLink = "https://api.foursquare.com/v2/venues/search?ll="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&client_id="+clientId+"&client_secret="+clientSecret+""
-		$.ajax({
-  		url: apiLink,
-  		dataType: 'jsonp',
-  	success: function(data){
-
-
-    	
-  			for (var i = 0; i < 6; i++) {
-  				//Unpack function
-           		var name = data.response.venues[i].name;
-           		var type = data.response.venues[i].categories[0].shortName;
-           		var tip = data.response.venues[i].stats.tipCount;
-           		var address = data.response.venues[i].location.address;
-           		var city = data.response.venues[i].location.city;
-           		var vLat = data.response.venues[i].location.lat;
-           		console.log(vLat)
-           		var vLong = data.response.venues[i].location.lng;
-           		var verified = data.response.venues[i].verified
-           		var id = data.response.venues[i].id
-           		var provider = "Foursquare"
-           		//Append data to list
-           		$( ".wet-card" ).slideDown().after( ' <li onclick="loadMore('+"'"+type+"'"+','+vLat+','+vLong+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+address+"'"+','+"'"+type2Emoji(type)+"'"+','+"'"+type2Emoji(type)+"'"+')" style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
-           	}  
-
-  		}
-	});
+	socket.emit('getVenue',localStorage.getItem("lat"),localStorage.getItem("long"));
 }
 
 
@@ -217,7 +184,7 @@ function getImage(query) {
 
 //Call Function on load
 window.onload = function () {
- getNearby();   
+ getNearby();
 }
 
 /*
@@ -232,42 +199,7 @@ Start Events
 */
 
 function getEvent() {
-	var eventKey = "HJRp25zS5jm5NJQr"
-	var eventLink = "http://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
-		$.ajax({
-  		url: eventLink,
-  		dataType: 'jsonp',
-  	success: function(data){
-  		
-
-
-  			for (var i = 0; i < 6; i++) {
-  				//Unpack function
-           		var name = data.events.event[i].title;
-           		var lat = data.events.event[i].latitude;
-           		var long = data.events.event[i].longitude;		
-				try {
-    				var image = data.events.event[i].image.medium.url;
-				}
-				catch(err) {
-    				var image = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRzbjllLfcybGqvOmehP2qaxFPAs5IXz5XLolnAfu_CuXh5eFLoevIxsTuh"
-				}	
-           		var venueName = data.events.event[i].venue_name;
-           		var venueAddress = data.events.event[i].venue_address;
-           		var startTime = data.events.event[i].start_time;
-           		var id = data.events.event[i].id;
-           		var eventfulUrl = data.events.event[i].url;
-           		var cityName = data.events.event[i].city_name;
-           		//Append data to list
-           		var rand = Math.floor(Math.random() * 7) + 1
-           		$('#event-start').after(' <li style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
-           	} 
-
-
-
-
-  	}
-  })
+	socket.emit('getEvent',localStorage.getItem("lat"),localStorage.getItem("long"));
 }
 
 
