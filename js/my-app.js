@@ -7,6 +7,7 @@
 */
 var socket = io("http://cly-swiftlyback.rhcloud.com")
 var myApp = new Framework7(); 
+var socket = io('http://localhost:3293')
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
   var mySwiper = myApp.swiper('.swiper-container', {
@@ -122,14 +123,20 @@ function getNearby(position) {
 		  getEvent()
 	});
 	}else{
+<<<<<<< HEAD
 		socket.emit('getVenue', localStorage.getItem("lat"), localStorage.getItem("long"))
 		getEvent()
+=======
+		getVenue();
+		getEvent();
+>>>>>>> origin/master
 	}
 	  
 }
 
 
 function getVenue() {
+<<<<<<< HEAD
 	// Check if Quad is old
 	// if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
 	// 	localStorage.removeItem("lat");
@@ -166,6 +173,9 @@ function getVenue() {
 
   		}
 	});
+=======
+	socket.emit('getVenue',localStorage.getItem("lat"),localStorage.getItem("long"));
+>>>>>>> origin/master
 }
 
 
@@ -229,7 +239,7 @@ function getImage(query) {
 
 //Call Function on load
 window.onload = function () {
- getNearby();   
+ getNearby();
 }
 
 /*
@@ -244,6 +254,7 @@ Start Events
 */
 
 function getEvent() {
+<<<<<<< HEAD
 	var eventKey = "HJRp25zS5jm5NJQr"
 	var eventLink = "https://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
 		$.ajax({
@@ -285,6 +296,9 @@ function getEvent() {
 
   	}
   })
+=======
+	socket.emit('getEvent',localStorage.getItem("lat"),localStorage.getItem("long"));
+>>>>>>> origin/master
 }
 
 
