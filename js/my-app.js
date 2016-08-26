@@ -3,11 +3,10 @@
 	  Unum (c) All rights reserved.
 	 The code that powers unum front.
 	Coded by Henry Confos & Tom Lister.
-
+	
 */
-var socket = io("http://cly-swiftlyback.rhcloud.com")
 var myApp = new Framework7(); 
-var socket = io('http://localhost:3293')
+var socket = io.connect('http://localhost:3000');
 var $$ = Dom7;
   // Init slider and store its instance in mySwiper variable
   var mySwiper = myApp.swiper('.swiper-container', {
@@ -59,9 +58,7 @@ function deg2rad(deg) {
 }
 
 function loadMore(type,lat,long,id,provider,name,address,emoji,color) {
-	console.log(1)
 	var distance = getDistance(lat,long,localStorage.getItem("lat"),localStorage.getItem("long"));
-	console.log(distance)
 	var time = distance * 0.50;
 	var uberFare = Number(distance * 1.50 + 5 + time).toFixed(2);
 	var taxiFare = Number(distance * 2.86 + 5).toFixed(2);
@@ -79,16 +76,17 @@ function closePopup() {
 	});
 }
 
-function trunc(text) {
-	var pre = text.substring(0,26);
-	if (text.length >= 26) {
-		var final = pre+"...";
-		return final;
-	} else {
-		return pre;
+function smartInfo() {
+	var d = new Date();
+	var n = d.getHours();
+	console.log(n)
+	if(n == 18 || n == 19 || 20){
+		//Dinner Time
+		
 	}
-
 }
+
+
 /*
 
 End Main Functions
@@ -101,11 +99,6 @@ Start Nearby Places
 
 */
 
-//Nearby Places (This is front end for now but will be pushed to back)
-
-
-var clientSecret = "AV3AU1AIPBEZZMCTRZUWSVUZUZOOK00MGGI3NBHO04A4FTHH&v=20130815";
-var clientId = "YBQLVNSQZGPKCTLBYBZKTAJENWY1CVAOHBPMVNDGIFP1VE4Y";
 
 
 function getNearby(position) {
@@ -119,64 +112,25 @@ function getNearby(position) {
 		  localStorage.setItem("lat", lat);
 		  localStorage.setItem("long", long);
 		  localStorage.setItem("quadTime", Date.now());
-		  socket.emit('getVenue', )
-		  getEvent()
+		  socket.emit('getEvent',localStorage.getItem("lat"),localStorage.getItem("long"))
+		  socket.emit('getVenue',localStorage.getItem("lat"),localStorage.getItem("long"))
 	});
 	}else{
-<<<<<<< HEAD
-		socket.emit('getVenue', localStorage.getItem("lat"), localStorage.getItem("long"))
-		getEvent()
-=======
-		getVenue();
-		getEvent();
->>>>>>> origin/master
+		socket.emit('getEvent',localStorage.getItem("lat"),localStorage.getItem("long"))
+		socket.emit('getVenue',localStorage.getItem("lat"),localStorage.getItem("long"))
 	}
 	  
 }
 
 
-function getVenue() {
-<<<<<<< HEAD
-	// Check if Quad is old
-	// if (Date.now() - localStorage.getItem("quadTime") >= 3600) {
-	// 	localStorage.removeItem("lat");
-	// 	 localStorage.removeItem("long");
-	// 	getNearby();
-	// }
-
-	//Get api request
-		var apiLink = "https://api.foursquare.com/v2/venues/search?ll="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&client_id="+clientId+"&client_secret="+clientSecret+""
-		$.ajax({
-  		url: apiLink,
-  		dataType: 'jsonp',
-  	success: function(data){
+socket.on('displayVenue', function (image,name,type,tip,address,city,vLat,vLong,verified,id,provider) {
+	$( ".wet-card" ).slideDown().after( ' <li onclick="loadMore('+"'"+type+"'"+','+vLat+','+vLong+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+address+"'"+','+"'"+type2Emoji(type)+"'"+','+"'"+type2Emoji(type)+"'"+')" style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div style="background-image: url('+image+');" class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
+})
 
 
-    	
-  			for (var i = 0; i < 6; i++) {
-  				//Unpack function
-           		var pre = data.response.venues[i].name;
-           		var name = trunc(pre);
-           		var type = data.response.venues[i].categories[0].shortName;
-           		var tip = data.response.venues[i].stats.tipCount;
-           		var address = data.response.venues[i].location.address;
-           		var city = data.response.venues[i].location.city;
-           		var vLat = data.response.venues[i].location.lat;
-           		console.log(vLat)
-           		var vLong = data.response.venues[i].location.lng;
-           		var verified = data.response.venues[i].verified
-           		var id = data.response.venues[i].id
-           		var provider = "Foursquare"
-           		//Append data to list
-           		$( ".wet-card" ).slideDown().after( ' <li onclick="loadMore('+"'"+type+"'"+','+vLat+','+vLong+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+address+"'"+','+"'"+type2Emoji(type)+"'"+','+"'"+type2Emoji(type)+"'"+')" style="background-color: '+type2Color(type)+';"class="food-card"> <div class="food-head"> <h2>'+type2Emoji(type)+'  '+type+' - '+tip+' tips</h2> </div> <div class="food-hero"></div> <div class="food-footer"> <h2>'+name+'</h2> <p style="margin: 0;">This '+type+' is located on '+address+' '+city+'</p> </div> </li>' );
-           	}  
-
-  		}
-	});
-=======
-	socket.emit('getVenue',localStorage.getItem("lat"),localStorage.getItem("long"));
->>>>>>> origin/master
-}
+socket.on('displayEvent', function (name,lat,long,id,provider,rand,emoji,eventfulUrl,startTime,venueAddress,venueName,cityName,image) {
+   $('#event-start').after(' <li onclick="loadMore('+"'"+name+"'"+','+lat+','+long+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+venueAddress+"'"+','+"'"+emoji+"'"+','+"'"+type2Color(rand)+"'"+')" style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
+})         	
 
 
 function type2Emoji(type) {
@@ -232,84 +186,13 @@ function type2Color(type) {
 	}
 }
 
-function getImage(query) {
-
-
-}
-
 //Call Function on load
 window.onload = function () {
  getNearby();
 }
 
-/*
 
-End Nearby Places
-
-*/
-/*
-
-Start Events
-
-*/
-
-function getEvent() {
-<<<<<<< HEAD
-	var eventKey = "HJRp25zS5jm5NJQr"
-	var eventLink = "https://api.eventful.com/json/events/search?app_key="+eventKey+"&where="+localStorage.getItem("lat")+","+localStorage.getItem("long")+"&within=25&units=km&sort_order=popularity"
-		$.ajax({
-  		url: eventLink,
-  		dataType: 'jsonp',
-  	success: function(data){
-  		
-
-
-  			for (var i = 0; i < 6; i++) {
-  				//Unpack function
-           		var pre = data.events.event[i].title;
-           		var name = trunc(pre);
-           		var lat = data.events.event[i].latitude;
-           		var long = data.events.event[i].longitude;		
-				try {
-    				var preImg = data.events.event[i].image.medium.url;
-    				var image = preImg.replace(/^http:\/\//i, 'https://');
-
-				}
-				catch(err) {
-    				var image = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRzbjllLfcybGqvOmehP2qaxFPAs5IXz5XLolnAfu_CuXh5eFLoevIxsTuh"
-				}	
-           		var venueName = data.events.event[i].venue_name;
-           		var venueAddress = data.events.event[i].venue_address;
-           		var startTime = data.events.event[i].start_time;
-           		var id = data.events.event[i].id;
-           		var eventfulUrl = data.events.event[i].url;
-           		var cityName = data.events.event[i].city_name;
-           		var provider = "Eventful"
-           		var emoji = "🎉";
-           		//Append data to list
-           		var rand = Math.floor(Math.random() * 7) + 1
-           		$('#event-start').after(' <li onclick="loadMore('+"'"+name+"'"+','+lat+','+long+','+"'"+id+"'"+','+"'"+provider+"'"+','+"'"+name+"'"+','+"'"+venueAddress+"'"+','+"'"+emoji+"'"+','+"'"+type2Color(rand)+"'"+')" style="background-color: '+type2Color(rand)+';" class="event-card"> <div class="event-head"> <h2>🎉 Event - '+name+'</h2> </div> <div style="background-image: url('+image+');" class="event-hero"></div> <div class="event-footer"> <h2>When - '+startTime+'</h2> <p>'+venueName+' / '+venueAddress+'</p> </div> </li>')
-           	} 
-
-
-
-
-  	}
-  })
-=======
-	socket.emit('getEvent',localStorage.getItem("lat"),localStorage.getItem("long"));
->>>>>>> origin/master
-}
-
-
-/*
-
-End Events
-
-*/
-
-
-
+socket.emit('getResturant',localStorage.getItem("lat"),localStorage.getItem("long"))
 
 
 
