@@ -6,8 +6,9 @@
 	
 */
 var myApp = new Framework7(); 
-var socket = io.connect('http://localhost:3000/');
+var socket = io.connect('https://unum-back.herokuapp.com/');
 var $$ = Dom7;
+var scoll;
   // Init slider and store its instance in mySwiper variable
   var mySwiper = myApp.swiper('.swiper-container', {
     pagination:'.swiper-pagination'
@@ -58,6 +59,8 @@ function deg2rad(deg) {
 }
 
 function loadMore(type,lat,long,id,provider,name,address,emoji,color) {
+	scroll = $(window).scrollTop()
+	$(window).scrollTop('0')
 	var distance = getDistance(lat,long,localStorage.getItem("lat"),localStorage.getItem("long"));
 	var time = distance * 0.50;
 	var uberFare = Number(distance * 1.50 + 5 + time).toFixed(2);
@@ -71,6 +74,7 @@ function loadMore(type,lat,long,id,provider,name,address,emoji,color) {
 }
 
 function closePopup() {
+	$(window).scrollTop(scroll)
 	$('.info-card').animate({width: 'toggle'}, 120, function(){
 		$('.info-card').remove();
 	});
@@ -80,6 +84,7 @@ function smartInfo() {
 	var d = new Date();
 	var n = d.getHours();
 			console.log(n)
+			n = 20
 	if(n >= 18 && n <= 24){
 		//Dinner Time
 		$('.hero-img').css('background-image','url(../night.jpg)');
@@ -106,15 +111,19 @@ function navLink(link) {
 }
 
 function popupBox(head,body,number,address,type,lat,long) {
+
+if (address == null){address = "We could not find an adress but here is the venue on a map"}else{address = "This venue is located on "+address}
 var mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center="+lat+","+long+"&zoom=18&size=500x400&sensor=false"
 	if(head == "fail"){
 		$('.main-list').append('<div style="background-color: #42A5F5;" class="popup-rest"> <div class="popup-head" > <h2>Unable to find near restarunts!</h2> </div> <hr> <div class="popup-body"> <p> There are no restarunts nearby!</p> </div> <div class="popup-number"> <br><p>Close ❌</p></div> </div>').toggle().slideDown();
 	}else{
-		$('.main-list').append('<div style="background-color: #42A5F5;" class="popup-rest"> <div class="popup-head" > <h2>🍴 '+head+'</h2> </div> <hr> <div class="popup-body"> <p> Food here we come! 😎 <br>This great restarunt is located on '+address+'</p> </div> <div class="info-map" style="background-image: url('+mapUrl+');"></div> <br><div class="popup-number"> <a href="tel:'+number+'"><div style="background-color: #2ecc71;" class="but">📞 '+number+'</div></a> <br><p>Close ❌</p></div> </div>').toggle().slideDown();
+		$('.main-list').append('<div style="background-color: #42A5F5;" class="popup-rest"> <div class="popup-head" > <h2>🍴 '+head+'</h2> </div> <hr> <div class="popup-body"> <p> Food here we come! 😎 <br>'+address+'</p> </div> <div class="info-map" style="background-image: url('+mapUrl+');"></div> <br><div class="popup-number"> <a href="tel:'+number+'"><div style="background-color: #2ecc71;" id="phone-but" class="but">📞 '+number+'</div></a> <br><p>Close ❌</p></div> </div>').hide().fadeIn();
+	if (number == null) {$('#phone-but').hide()}
 	}
 }
 
 function closePop() {
+	$('#phone-but').show()
 	$('.popup-rest').remove();
 }
 
@@ -136,6 +145,7 @@ Start Nearby Places
 
 
 function getNearby(position) {
+	console.log("ok")
 	//Get geo location
 	if(localStorage.getItem("lat") == undefined){
 		navigator.geolocation.getCurrentPosition(function(location) {
