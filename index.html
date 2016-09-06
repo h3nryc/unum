@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="css/framework7.ios.css">
     <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
     <link rel="stylesheet" href="css/my-app.css">
-<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"> -->
+      rel="stylesheet">
     <script src="js/weather.js"></script>
     <script src='https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="sydney")&format=json&callback=callbackFunction1'></script>
   </head>
@@ -29,14 +29,18 @@
            <!-- You tab -->
             <div id="you" class="swiper-slide ">
               <div class="hero-img">
-              <h2 class="logo">unum | you</h2>
+                <div class="navcontl">
+                  <i class="material-icons">settings</i>
+                  <i onclick="refresh();" id="refresh" style="float: right; color: grey;"class="material-icons">refresh</i>
+                </div>
+              <h2 id="you-logo" class="logo">unum | you</h2>
               </div>
               <div class="main-list">
               <!-- You list -->
                 <ul class="you-list">
                   <li onclick="more();" class="wet-card">
                     <div id='emoji-left' class="emoji-left">
-                      <h2>👋</h2> 
+                      <h2>👋</h2>
                     </div>
                     <div class="wet-text">
                       <h2><div style='display: inline;' id='onewordweather'></div>&nbsp<div style='display: inline;' id='temp'></div></h2>
@@ -50,13 +54,18 @@
                   <div id="smart-start"></div>
                   <div id="venue-start"></div>
                   <div id="event-start"></div>
+                  <div style="float: left; display: none;position: relative;left: 45%;" class="load">
+                    <div class="loading"></div>
+                  </div>
                   </ul>
                 </ul>
               </div>
             </div>
             <!-- World tab -->
             <div id="world" class="swiper-slide">
-              
+              <div id="world-hero" class="hero-img">
+              <h2 class="logo">unum | world 🌎</h2>
+              </div>
             </div>
           </div>
           <div class="swiper-pagination"></div>
